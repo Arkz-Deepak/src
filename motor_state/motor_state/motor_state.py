@@ -2,7 +2,7 @@
 
 import rclpy
 from rclpy.node import Node
-from example_interfaces.msg import Int16
+from motor_interfaces.msg import MotorState
 
 class MotorStateHMI(Node):
     # Define our 4 states as integers (0, 1, 2, 3)
@@ -18,10 +18,10 @@ class MotorStateHMI(Node):
         self.current_state = self.STATE_OFF
         self.delay_timer = None     # Placeholder for our one-shot timer
         
-        self.create_subscription(Int16, '/ctrl_signal', self.motor_state_callback, 10)
+        self.create_subscription(MotorState, '/ctrl_signal', self.motor_state_callback, 10)
 
-    def motor_state_callback(self, msg: Int16):
-        command = msg.data
+    def motor_state_callback(self, msg: MotorState):
+        command = msg.ctrl_signal
 
         # --- TURN ON COMMAND ---
         if command == 1:

@@ -1,0 +1,3 @@
+bool motor_state
+float64 motor_temp
+int64 ctrl_signal

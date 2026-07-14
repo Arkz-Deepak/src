@@ -2,17 +2,16 @@
 
 import rclpy
 from rclpy.node import Node
-from example_interfaces.msg import Float64, Int16
-
+from motor_interfaces.msg import MotorState
 class MotorControllerNode(Node):
     def __init__(self):
         super().__init__('motor_contoller_node')
-        self.ctrl_pub_ = self.create_publisher(Int16, '/ctrl_signal', 20)
-        self.temp_ = self.create_subscription(Float64, '/motor_temp', self.control_callback, 10)
+        self.ctrl_pub_ = self.create_publisher(MotorState, '/ctrl_signal', 20)
+        self.temp_ = self.create_subscription(MotorState, '/motor_temp', self.control_callback, 10)
         self.ctrl_sig_ = 0
 
-    def control_callback(self,msg: Float64):
-        if msg.data > 45.0:
+    def control_callback(self,msg: MotorState):
+        if msg.motor_temp > 45.0:
             if self.ctrl_sig_ == 0:
                 self.get_logger().info("The motor is in off state")
             else:
@@ -24,8 +23,8 @@ class MotorControllerNode(Node):
             else:
                 self.get_logger().info("Turning on the motor")
             self.ctrl_sig_ = 1
-        signal = Int16()
-        signal.data = self.ctrl_sig_
+        signal = MotorState()
+        signal.ctrl_signal = self.ctrl_sig_
         self.ctrl_pub_.publish(signal)
 
 
